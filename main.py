@@ -25,7 +25,7 @@ class tubi_classe:
         SCHERMO.blit(tubo_giu, (self.x, self.y+210)) 
         SCHERMO.blit(tubo_su, (self.x, self.y-210)) 
     def collisione(self, uccello, uccellox, uccelloy):
-        tolleranza = 1
+        tolleranza = 10
         uccello_lato_dx = uccellox + uccello.get_width()-tolleranza 
         uccello_lato_sx = uccellox + tolleranza
         tubi_lato_dx = self.x + tubo_giu.get_width()
@@ -70,11 +70,8 @@ def disegna_oggetti():
         t.avanza_e_disegna()
     SCHERMO.blit(uccello, (uccellox,uccelloy))
     SCHERMO.blit(base, (basex,400))
-    punti_render = FONT.render(str(punti), 1, (255, 255, 255))
-    SCHERMO.blit(punti_render, (144,0))
-    
-    
-
+    punti_render = FONT.render('Punti:' + str(punti), 1, (255, 255, 255))
+    SCHERMO.blit(punti_render, (100,0))
 
 def aggiorna():
     pygame.display.update()
@@ -96,7 +93,6 @@ def hai_perso():
 
 inizializza()
 
-
 while True:
     basex -= VEL_AVANZ
     if basex < -45: basex = 0
@@ -114,6 +110,7 @@ while True:
     if tubi[-1].x < 150: tubi.append(tubi_classe())
     for t in tubi:
         t.collisione(uccello, uccellox, uccelloy)
+    #conteggio punti
     if not punti_su:
         for t in tubi:
             if t.punti_su(uccello, uccellox):
@@ -127,6 +124,7 @@ while True:
                 break
         if not punti_su:
             punti += 1 
+            print('[debug] punto (' + str(punti) + ')')
     #collisione base
     if uccelloy > 380:
         hai_perso()
