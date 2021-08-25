@@ -59,10 +59,12 @@ def inizializza():
     global tubi
     global punti
     global punti_su
+    global mast
     uccellox, uccelloy = 60, 150 #assegna la posizione inzialaìe dell'uccello  impostando le varibili di posizione
     uccello_vely = 0
     basex = 0
     punti = 0
+    mast = 0
     tubi = [] #crea una lista con i tubi
     tubi.append(tubi_classe()) #aggiunge alla lista dei tubi quelli contenuti nella classe
     punti_su = False #all'inizio i punti non salgono
@@ -76,7 +78,9 @@ def disegna_oggetti():
     SCHERMO.blit(uccello, (uccellox,uccelloy)) #fa vedere l'uccello nelle coodinate delle variabili
     SCHERMO.blit(base, (basex,400)) #fa vedere la base alla sua coordinata
     punti_render = FONT.render('Punti:' + str(punti), 1, (255, 255, 255)) #imposta il font della scritta dei punti
+    mast_render = FONT.render('mast:' + str(mast), 1, (255, 255, 255))
     SCHERMO.blit(punti_render, (100,0)) #fa vedere la scritta dei punti
+    SCHERMO.blit(mast_render, (100, 50))
 
 def aggiorna():
     pygame.display.update() #aggiorna gli elementi sullo schermo
@@ -91,6 +95,21 @@ def hai_perso():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: #se viene premuto lo spazio
                 print('[debug] spazio premuto (code_ K_SPACE)') #stmapa che è stao premuto
+                inizializza() #fa partire il gioco
+                ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
+            if event.type == pygame.QUIT: #se si esce dal gioco
+                pygame.quit() #ferma il gioco e esce da pygame
+                sys.exit(0) #il sitema termina il processo
+
+def pausa():
+    SCHERMO.blit(gameover, (50,180)) #fa vedere l'immagine di game over
+    print('//////////////// PAUSA ///////////////') #stampa sulla console il game over
+    aggiorna() #chiama aggiorna e aggiorna tutto
+    ricominciamo = False #imposta la partenza del gioco su false
+    while not ricominciamo:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #se viene premuto la p
+                print('[debug] uscito da pausa (code_ K_p)') #stmapa che è stao premuto
                 inizializza() #fa partire il gioco
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
             if event.type == pygame.QUIT: #se si esce dal gioco
@@ -113,6 +132,8 @@ while True:
         if event.type == pygame.QUIT: #se si esce
             pygame.quit() #arresta pygame
             sys.exit(0) #il sistema sopprime il processo
+        if event.type == pygame.KEYDOWN  and event.key == pygame.K_p:
+            pausa()
     #gestione tubi
     if tubi[-1].x < 150: tubi.append(tubi_classe()) #se il l'ultimo tubo esce, si aggiunge ancora la clesse alla lista
     for t in tubi: #per ogni tubo in tubi
@@ -131,7 +152,7 @@ while True:
                 break
         if not punti_su:
             punti += 1 #quindi dopo tutto sto can can aumenta la variabile dei punti 
-            print('[debug] punto (' + str(punti) + ')') #stampa nella console di debugche si è ottenuto un punto e queanti ne si soono accumulati
+            print('[debug] punto (' + str(punti) + ')') #stampa nella console di debugche si è ottenuto un punto e queanti ne si soono accumulat
     #collisione base
     if uccelloy > 380: #se la posizione vericale dell'uccello  è 380 (fine della finestra)
         hai_perso() #chiama hai perso
