@@ -10,7 +10,8 @@ base = pygame.image.load('immagini/base.png')
 gameover = pygame.image.load('immagini/gameover.png')
 tubo_giu = pygame.image.load('immagini/tubo.png')
 tubo_su = pygame.transform.flip(tubo_giu, False, True)
-
+pause = pygame.image.load('immagini/pausa.png')
+tolleranza = 0
 #costanti globali
 SCHERMO = pygame.display.set_mode((288, 512))
 FPS = 60
@@ -29,7 +30,8 @@ class tubi_classe:
         SCHERMO.blit(tubo_su, (self.x, self.y-210)) 
     #collisione con tubo
     def collisione(self, uccello, uccellox, uccelloy):
-        tolleranza = 10 #+ tolleranza + facile
+        global tolleranza
+        tolleranza = 2 #+ tolleranza + facile
         uccello_lato_dx = uccellox + uccello.get_width()-tolleranza 
         uccello_lato_sx = uccellox + tolleranza
         tubi_lato_dx = self.x + tubo_giu.get_width()
@@ -60,6 +62,7 @@ def inizializza():
     global punti
     global punti_su
     global mast
+    global tolleranza
     uccellox, uccelloy = 60, 150 #assegna la posizione inzialaìe dell'uccello  impostando le varibili di posizione
     uccello_vely = 0
     basex = 0
@@ -69,6 +72,7 @@ def inizializza():
     tubi.append(tubi_classe()) #aggiunge alla lista dei tubi quelli contenuti nella classe
     punti_su = False #all'inizio i punti non salgono
     print('[debug] inizializzato') #stamap sulla console che il gioco è partito
+    print('[debug] tolleranza = ' + str(tolleranza))
     
 
 def disegna_oggetti():
@@ -88,7 +92,7 @@ def aggiorna():
 
 def hai_perso():
     SCHERMO.blit(gameover, (50,180)) #fa vedere l'immagine di game over
-    print('################ GAME OVER game finisched ##############') #stampa sulla console il game over
+    print('[game] GAME OVER') #stampa sulla console il game over
     aggiorna() #chiama aggiorna e aggiorna tutto
     ricominciamo = False #imposta la partenza del gioco su false
     while not ricominciamo:
@@ -102,8 +106,8 @@ def hai_perso():
                 sys.exit(0) #il sitema termina il processo
 
 def pausa():
-    SCHERMO.blit(gameover, (50,180)) #fa vedere l'immagine di game over
-    print('//////////////// PAUSA ///////////////') #stampa sulla console il game over
+    SCHERMO.blit(pause, (1,1)) #fa vedere l'immagine di pausa
+    print('[game] PAUSA') #stampa sulla console il game over
     aggiorna() #chiama aggiorna e aggiorna tutto
     ricominciamo = False #imposta la partenza del gioco su false
     while not ricominciamo:
@@ -129,6 +133,12 @@ while True:
         if ( event.type == pygame.KEYDOWN
             and event.key == pygame.K_UP or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) : #se si preme freccia su o spazio
             uccello_vely = -5 #fa alzare l'uccello
+        elif (event.type == pygame.MOUSEBUTTONDOWN
+              and event.button == 1):
+            uccello_vely = -5
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+            tolleranza = 10
+            print('[game] tolleranza aumentata ' + str(tolleranza))
         if event.type == pygame.QUIT: #se si esce
             pygame.quit() #arresta pygame
             sys.exit(0) #il sistema sopprime il processo
@@ -152,7 +162,7 @@ while True:
                 break
         if not punti_su:
             punti += 1 #quindi dopo tutto sto can can aumenta la variabile dei punti 
-            print('[debug] punto (' + str(punti) + ')') #stampa nella console di debugche si è ottenuto un punto e queanti ne si soono accumulat
+            print('[game] punto (' + str(punti) + ')') #stampa nella console di debugche si è ottenuto un punto e queanti ne si soono accumulat
     #collisione base
     if uccelloy > 380: #se la posizione vericale dell'uccello  è 380 (fine della finestra)
         hai_perso() #chiama hai perso
