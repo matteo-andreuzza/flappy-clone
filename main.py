@@ -1,7 +1,7 @@
 import pygame
 import random
 import sys
-
+import time
 pygame.init()
 #caricamento immagini
 sfondo = pygame.image.load('immagini/sfondo.png')
@@ -61,13 +61,11 @@ def inizializza():
     global tubi
     global punti
     global punti_su
-    global mast
     global tolleranza
     uccellox, uccelloy = 60, 150 #assegna la posizione inzialaìe dell'uccello  impostando le varibili di posizione
     uccello_vely = 0
     basex = 0
     punti = 0
-    mast = 0
     tubi = [] #crea una lista con i tubi
     tubi.append(tubi_classe()) #aggiunge alla lista dei tubi quelli contenuti nella classe
     punti_su = False #all'inizio i punti non salgono
@@ -82,9 +80,7 @@ def disegna_oggetti():
     SCHERMO.blit(uccello, (uccellox,uccelloy)) #fa vedere l'uccello nelle coodinate delle variabili
     SCHERMO.blit(base, (basex,400)) #fa vedere la base alla sua coordinata
     punti_render = FONT.render('Punti:' + str(punti), 1, (255, 255, 255)) #imposta il font della scritta dei punti
-    mast_render = FONT.render('mast:' + str(mast), 1, (255, 255, 255))
     SCHERMO.blit(punti_render, (100,0)) #fa vedere la scritta dei punti
-    SCHERMO.blit(mast_render, (100, 50))
 
 def aggiorna():
     pygame.display.update() #aggiorna gli elementi sullo schermo
@@ -114,11 +110,11 @@ def pausa():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #se viene premuto la p
                 print('[debug] uscito da pausa (code_ K_p)') #stmapa che è stao premuto
-                inizializza() #fa partire il gioco
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
             if event.type == pygame.QUIT: #se si esce dal gioco
                 pygame.quit() #ferma il gioco e esce da pygame
                 sys.exit(0) #il sitema termina il processo
+
 
 inizializza() #fa partire il gioco
 
