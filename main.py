@@ -8,36 +8,36 @@ sfondo = pygame.image.load('immagini/sfondo.png')
 uccello = pygame.image.load('immagini/uccello.png')
 base = pygame.image.load('immagini/base.png')
 gameover = pygame.image.load('immagini/gameover.png')
-tubo_giu = pygame.image.load('immagini/tubo.png')
-tubo_su = pygame.transform.flip(tubo_giu, False, True)
+tuboGiu = pygame.image.load('immagini/tubo.png')
+tuboSu = pygame.transform.flip(tuboGiu, False, True)
 pause = pygame.image.load('immagini/pausa.png')
-tolleranza = 0
+facile = 0
 #costanti globali
 SCHERMO = pygame.display.set_mode((288, 512))
 FPS = 60
-VEL_AVANZ = 1
+VEL = 1
 FONT = pygame.font.SysFont('Comic Sans MS', 50, bold=False)
 #classe tubi (contiene i tubi)
-class tubi_classe:
+class tubi_class:
     #definisce la posizione dei tubi
     def __init__(self):
         self.x = 300
         self.y = random.randint(-10, 30)
     #disegna i tubi
     def avanza_e_disegna(self):
-        self.x -= VEL_AVANZ
-        SCHERMO.blit(tubo_giu, (self.x, self.y+210)) 
-        SCHERMO.blit(tubo_su, (self.x, self.y-210)) 
+        self.x -= VEL
+        SCHERMO.blit(tuboGiu, (self.x, self.y+210)) 
+        SCHERMO.blit(tuboSu, (self.x, self.y-210)) 
     #collisione con tubo
     def collisione(self, uccello, uccellox, uccelloy):
-        global tolleranza
-        tolleranza = 2 #+ tolleranza + facile
-        uccello_lato_dx = uccellox + uccello.get_width()-tolleranza 
-        uccello_lato_sx = uccellox + tolleranza
-        tubi_lato_dx = self.x + tubo_giu.get_width()
+        global facile
+        facile = 2 #+ facile + facile
+        uccello_lato_dx = uccellox + uccello.get_width()-facile 
+        uccello_lato_sx = uccellox + facile
+        tubi_lato_dx = self.x + tuboGiu.get_width()
         tubi_lato_sx = self.x
-        uccello_lato_su = uccelloy + tolleranza
-        uccello_lato_giu = uccelloy + uccello.get_height() - tolleranza
+        uccello_lato_su = uccelloy + facile
+        uccello_lato_giu = uccelloy + uccello.get_height() - facile
         tubi_lato_su = self.y + 110
         tubi_lato_giu = self.y + 210
         #collisione
@@ -46,10 +46,10 @@ class tubi_classe:
                 hai_perso() #chiama hai perso e stampa game over
                 print('[debug] collisione tubo') #stmapa il motivo della collisione sulla console
     def punti_su(self, uccello, uccellox): #controlla che il tubo in questione non abbia l'uccello sovrapposto
-        tolleranza = 5
-        uccello_lato_dx = uccellox + uccello.get_width()-tolleranza 
-        uccello_lato_sx = uccellox + tolleranza
-        tubi_lato_dx = self.x + tubo_giu.get_width()
+        facile = 5
+        uccello_lato_dx = uccellox + uccello.get_width()-facile 
+        uccello_lato_sx = uccellox + facile
+        tubi_lato_dx = self.x + tuboGiu.get_width()
         tubi_lato_sx = self.x
         if uccello_lato_dx > tubi_lato_sx and uccello_lato_sx < tubi_lato_dx: #se l'uccello sorpassa i tubi
             return True
@@ -61,16 +61,16 @@ def inizializza():
     global tubi
     global punti
     global punti_su
-    global tolleranza
+    global facile
     uccellox, uccelloy = 60, 150 #assegna la posizione inzialaìe dell'uccello  impostando le varibili di posizione
     uccello_vely = 0
     basex = 0
     punti = 0
     tubi = [] #crea una lista con i tubi
-    tubi.append(tubi_classe()) #aggiunge alla lista dei tubi quelli contenuti nella classe
+    tubi.append(tubi_class()) #aggiunge alla lista dei tubi quelli contenuti nella classe
     punti_su = False #all'inizio i punti non salgono
     print('[debug] inizializzato') #stamap sulla console che il gioco è partito
-    print('[debug] tolleranza = ' + str(tolleranza))
+    print('[debug] facile = ' + str(facile))
     
 
 def disegna_oggetti():
@@ -119,7 +119,7 @@ def pausa():
 inizializza() #fa partire il gioco
 
 while True:
-    basex -= VEL_AVANZ #la base scorre
+    basex -= VEL #la base scorre
     if basex < -45: basex = 0 #quando la base arriva alla fine, viene riportata all'inzio per dare senso di continuità
     #gravità
     uccello_vely += 0.7 #velocità dell'uccello minore o = a 0.7 (valore modificabile)
@@ -133,15 +133,15 @@ while True:
               and event.button == 1):
             uccello_vely = -5
         if  event.type == pygame.KEYDOWN and event.key == pygame.K_t:
-            tolleranza = 10
-            print('[game] tolleranza aumentata ' + str(tolleranza))
+            facile = 10
+            print('[game] facile aumentata ' + str(facile))
         if event.type == pygame.QUIT: #se si esce
             pygame.quit() #arresta pygame
             sys.exit(0) #il sistema sopprime il processo
         if event.type == pygame.KEYDOWN  and event.key == pygame.K_p:
             pausa()
     #gestione tubi
-    if tubi[-1].x < 150: tubi.append(tubi_classe()) #se il l'ultimo tubo esce, si aggiunge ancora la clesse alla lista
+    if tubi[-1].x < 150: tubi.append(tubi_class()) #se il l'ultimo tubo esce, si aggiunge ancora la clesse alla lista
     for t in tubi: #per ogni tubo in tubi
         t.collisione(uccello, uccellox, uccelloy) #con il metodo collisione controlla sel al tubo t è sovrapposto l'uccello
     #conteggio punti
