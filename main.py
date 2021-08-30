@@ -17,6 +17,7 @@ SCHERMO = pygame.display.set_mode((288, 512))
 FPS = 60
 VEL = 1
 FONT = pygame.font.SysFont('Comic Sans MS', 50, bold=False)
+FONT2 = pygame.font.SysFont('Comic Sans MS', 30, bold=False)
 #classe tubi (contiene i tubi)
 class tubi_class:
     #definisce la posizione dei tubi
@@ -54,7 +55,10 @@ class tubi_class:
         if uccello_lato_dx > tubi_lato_sx and uccello_lato_sx < tubi_lato_dx: #se l'uccello sorpassa i tubi
             return True
 #funzioni
+
 def inizializza():
+    if primo == True:
+        menù_primo()
     #definixce le varibili globali
     global uccellox, uccelloy, uccello_vely
     global basex
@@ -72,7 +76,6 @@ def inizializza():
     print('[debug] inizializzato') #stamap sulla console che il gioco è partito
     print('[debug] facile = ' + str(facile))
     
-
 def disegna_oggetti():
     SCHERMO.blit(sfondo, (0,0)) #fa vedere lo sfondo
     for t in tubi:
@@ -93,7 +96,7 @@ def hai_perso():
     ricominciamo = False #imposta la partenza del gioco su false
     while not ricominciamo:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: #se viene premuto lo spazio
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE or event.type == pygame.KEYDOWN and event.key == pygame.K_UP: #se viene premuto lo spazio o freccia su 
                 print('[debug] spazio premuto (code_ K_SPACE)') #stmapa che è stao premuto
                 inizializza() #fa partire il gioco
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
@@ -115,10 +118,27 @@ def pausa():
                 pygame.quit() #ferma il gioco e esce da pygame
                 sys.exit(0) #il sitema termina il processo
 
-
+def menù_primo():
+    ricominciamo = False #imposta la partenza del gioco su false
+    while not ricominciamo:
+        SCHERMO.blit(sfondo, (1,1)) #fa vedere l'immagine di sfodo
+        scritta = FONT2.render('premi spazio', 1, (255, 255, 255)) #imposta il font della scritta
+        scritta2 = FONT2.render('per iniziare', 1, (255, 255, 255)) #imposta il font della scritta
+        SCHERMO.blit(scritta, (50,0)) #fa vedere la scritta di partenza
+        SCHERMO.blit(scritta2, (50,50)) #fa vedere la scritta di partenza
+        aggiorna()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: #se viene premuto la p
+                print('[debug] p premuta per inizio gioco (code_ K_SPACE)') #stmapa che è stao premuto
+                ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
+            if event.type == pygame.QUIT: #se si esce dal gioco
+                pygame.quit() #ferma il gioco e esce da pygame
+                sys.exit(0) #il sitema termina il processo
+primo = True
 inizializza() #fa partire il gioco
 
 while True:
+    primo = False
     basex -= VEL #la base scorre
     if basex < -45: basex = 0 #quando la base arriva alla fine, viene riportata all'inzio per dare senso di continuità
     #gravità
