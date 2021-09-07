@@ -23,7 +23,7 @@ class tubi_class:
     #definisce la posizione dei tubi
     def __init__(self):
         self.x = 300
-        self.y = random.randint(-10, 30)
+        self.y = random.randint(-20, 50)
     #disegna i tubi
     def avanza_e_disegna(self):
         self.x -= VEL
@@ -129,7 +129,7 @@ def menù_primo():
         aggiorna()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE: #se viene premuto la p
-                print('[debug] p premuta per inizio gioco (code_ K_SPACE)') #stmapa che è stao premuto
+                print('[debug] spazio premuto per inizio gioco (code_ K_SPACE)') #stmapa che è stao premuto
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
             if event.type == pygame.QUIT: #se si esce dal gioco
                 pygame.quit() #ferma il gioco e esce da pygame
