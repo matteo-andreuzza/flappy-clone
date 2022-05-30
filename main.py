@@ -11,13 +11,14 @@ gameover = pygame.image.load('immagini/gameover.png')
 tuboGiu = pygame.image.load('immagini/tubo.png')
 tuboSu = pygame.transform.flip(tuboGiu, False, True)
 pause = pygame.image.load('immagini/pausa.png')
+mast = 0
 facile = 0
 #costanti globali
 SCHERMO = pygame.display.set_mode((288, 512))
 FPS = 60
 VEL = 1
-FONT = pygame.font.SysFont('Comic Sans MS', 50, bold=False)
-FONT2 = pygame.font.SysFont('Comic Sans MS', 30, bold=False)
+FONT = pygame.font.SysFont('verdana', 50, bold=False)
+FONT2 = pygame.font.SysFont('impact', 30, bold=False)
 #classe tubi (contiene i tubi)
 class tubi_class:
     #definisce la posizione dei tubi
@@ -83,7 +84,9 @@ def disegna_oggetti():
     SCHERMO.blit(uccello, (uccellox,uccelloy)) #fa vedere l'uccello nelle coodinate delle variabili
     SCHERMO.blit(base, (basex,400)) #fa vedere la base alla sua coordinata
     punti_render = FONT.render('Punti:' + str(punti), 1, (255, 255, 255)) #imposta il font della scritta dei punti
-    SCHERMO.blit(punti_render, (100,0)) #fa vedere la scritta dei punti
+    mast_render = FONT.render('Mast:' + str(mast), 1, (255, 255, 255)) #imposta il font della scritta del mast
+    SCHERMO.blit(punti_render, (30,410)) #fa vedere la scritta dei punti
+    SCHERMO.blit(mast_render, (30,450)) #fa vedere la scritta del mast
 
 def aggiorna():
     pygame.display.update() #aggiorna gli elementi sullo schermo
@@ -98,10 +101,16 @@ def hai_perso():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE or event.type == pygame.KEYDOWN and event.key == pygame.K_UP: #se viene premuto lo spazio o freccia su 
                 print('[debug] spazio premuto (code_ K_SPACE)') #stmapa che è stao premuto
+                global mast
+                if mast < punti or mast == punti:
+                    mast = punti #se il mast è minore o uguale dei punti impostalo a punti
+                    print('[debug] mast = ' + str(mast))#stampa sulla console il mast
+                else:
+                    print("[debug] mast = " + str(mast)) #stampa sulla console il mast  
                 inizializza() #fa partire il gioco
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
             if event.type == pygame.QUIT: #se si esce dal gioco
-                pygame.quit() #ferma il gioco e esce da pygame
+                pygame.quit() #ferma il gioco e esce da pygames
                 sys.exit(0) #il sitema termina il processo
 
 def pausa():
@@ -136,7 +145,6 @@ def menù_primo():
                 sys.exit(0) #il sitema termina il processo
 primo = True
 inizializza() #fa partire il gioco
-
 while True:
     primo = False
     basex -= VEL #la base scorre
