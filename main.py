@@ -1,9 +1,19 @@
 import pygame
 import random
+from pygame.locals import * 
+from pygame import mixer
 import sys
 import time
-pygame.init()
+pygame.init() #! inizializza pygame
+print('[debug] pygame inizializzato')
+mixer.init()#! inizializza il mixer
+print('[debug] mixer inizializzato')
+mixer.music.load('music/bensound-summer_ogg_music.ogg') #? carica la musica
+print('[debug] musica caricata')
+mixer.music.play() #? riproduce la musica in loop
+print('[debug] musica inizializzata')
 #caricamento immagini
+print("[debug] caricamento immagini")
 sfondo = pygame.image.load('immagini/sfondo.png')
 uccello = pygame.image.load('immagini/uccello.png')
 base = pygame.image.load('immagini/base.png')
@@ -11,8 +21,9 @@ gameover = pygame.image.load('immagini/gameover.png')
 tuboGiu = pygame.image.load('immagini/tubo.png')
 tuboSu = pygame.transform.flip(tuboGiu, False, True)
 pause = pygame.image.load('immagini/pausa.png')
-mast = 0
+print('[debug] immagini caricate') 
 facile = 0
+mast = 0
 #costanti globali
 SCHERMO = pygame.display.set_mode((288, 512))
 FPS = 60
