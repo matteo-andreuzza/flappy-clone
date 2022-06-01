@@ -131,8 +131,8 @@ def pausa():
     ricominciamo = False #imposta la partenza del gioco su false
     while not ricominciamo:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #se viene premuto la p
-                print('[debug] uscito da pausa (code_ K_p)') #stmapa che è stao premuto
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p or event.type == pygame.KEYDOWN and event.key == K_SPACE: #se viene premuta la p o lo spazio
+                print('[debug] uscito da pausa (code_)' + str(event.key) + ')') #stmapa che è stato premuto o spazio o p
                 ricominciamo = True # porta la ripartenza del gioco su vero per uscire dal ciclo
             if event.type == pygame.QUIT: #se si esce dal gioco
                 pygame.quit() #ferma il gioco e esce da pygame
